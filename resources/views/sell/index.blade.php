@@ -158,7 +158,7 @@ $(document).ready( function(){
             { data: 'transaction_date', name: 'transaction_date'  },
             { data: 'invoice_no', name: 'invoice_no'},
             { data: 'conatct_name', name: 'conatct_name'},
-            { data: 'mobile', name: 'contacts.mobile'},
+            { data: 'contact_phone', name: 'contact_phone'},
             { data: 'business_location', name: 'bl.name'},
             { data: 'payment_status', name: 'payment_status'},
             { data: 'payment_methods', orderable: false, "searchable": false},

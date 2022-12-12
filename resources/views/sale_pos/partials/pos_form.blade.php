@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon">
@@ -20,6 +20,18 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-phone"></i>
+                </span>
+                {!! Form::text('customer_phone', null, ['class' => 'form-control', 'id' => 'customer_phone', 'placeholder' => 'Enter Customer phone', 'style' => 'width: 100%;']) !!}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
     <div class="col-md-8">
         <div class="form-group">
             <div class="input-group">
@@ -43,8 +55,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="row">
     {{-- found --}}
     <div class="col-md-4">
         <p style="color:red" data-toggle="modal" class="btn btn-link btn-modal" data-target="#duelist" id="getdueslist"> Credit Dues: <strong id="total_dues">0.0000 </strong> </p>
@@ -52,7 +62,8 @@
     
     <input type="hidden" name="pay_term_number" id="pay_term_number" value="{{ $walk_in_customer['pay_term_number'] ?? '' }}">
     <input type="hidden" name="pay_term_type" id="pay_term_type" value="{{ $walk_in_customer['pay_term_type'] ?? '' }}">
-
+</div>
+<div class="row">
     @if (!empty($commission_agent))
         <div class="col-md-4">
             <div class="form-group">

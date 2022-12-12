@@ -531,6 +531,18 @@ class SellController extends Controller
                         ->orWhere('contacts.supplier_business_name', 'like', "%{$keyword}%");
                     });
                 })
+                ->addColumn('contact_phone', function ($data) {
+                    if($data->customer_contact == 1){
+                        return $data->contact;    
+                    }else{
+                        return $data->mobile;
+                    }
+                })
+                ->filterColumn('contact_phone', function ($query, $keyword) {
+                    $query->where( function($q) use($keyword) {
+                        $q->where('contact', 'like', "%{$keyword}%");
+                    });
+                })
                 ->addColumn('payment_methods', function ($row) use ($payment_types) {
                     $methods = array_unique($row->payment_lines->pluck('method')->toArray());
                     $count = count($methods);
@@ -568,7 +580,7 @@ class SellController extends Controller
                         }
                     }]);
 
-            $rawColumns = ['final_total', 'action', 'total_paid', 'total_remaining', 'payment_status', 'invoice_no', 'discount_amount', 'tax_amount', 'total_before_tax', 'shipping_status', 'types_of_service_name', 'payment_methods', 'return_due', 'conatct_name', 'status'];
+            $rawColumns = ['final_total', 'action', 'total_paid', 'total_remaining', 'payment_status', 'invoice_no', 'discount_amount', 'tax_amount', 'total_before_tax', 'shipping_status', 'types_of_service_name', 'payment_methods', 'return_due', 'conatct_name', 'contact_phone', 'status'];
                 
             return $datatable->rawColumns($rawColumns)
                       ->make(true);

@@ -23,6 +23,7 @@ use App\TransactionSellLine;
 use App\TransactionSellLinesPurchaseLines;
 use App\Variation;
 use App\VariationLocationDetails;
+use App\WalkInCustomerContact;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Utils\ModuleUtil;
@@ -125,6 +126,14 @@ class TransactionUtil extends Util
             'export_custom_fields_info' => (!empty($input['is_export']) && !empty($input['export_custom_fields_info'])) ? $input['export_custom_fields_info'] : null
 
         ]);
+
+        //Walk in Customer Contact
+        if($transaction->contact_id == 1){
+            $save = new WalkInCustomerContact;
+            $save->contact = $input['customer_phone'];
+            $save->transaction_id = $transaction->id;
+            $save->save();
+        }
 
         return $transaction;
     }
@@ -4668,10 +4677,12 @@ class TransactionUtil extends Util
                     '=',
                     'tos.id'
                 )
+                ->leftJoin('walk_in_customer_contacts as wcc', 'transactions.id', '=', 'wcc.transaction_id')
                 ->where('transactions.business_id', $business_id)
                 ->where('transactions.type', $sale_type)
                 ->select(
                     'transactions.id',
+                    'transactions.contact_id as customer_contact',
                     'transactions.transaction_date',
                     'transactions.type',
                     'transactions.is_direct_sale',
@@ -4704,6 +4715,7 @@ class TransactionUtil extends Util
                     'transactions.shipping_custom_field_3',
                     'transactions.shipping_custom_field_4',
                     'transactions.shipping_custom_field_5',
+                    'wcc.contact',
                     DB::raw('DATE_FORMAT(transactions.transaction_date, "%Y/%m/%d") as sale_date'),
                     DB::raw("CONCAT(COALESCE(u.surname, ''),' ',COALESCE(u.first_name, ''),' ',COALESCE(u.last_name,'')) as added_by"),
                     DB::raw('(SELECT SUM(IF(TP.is_return = 1,-1*TP.amount,TP.amount)) FROM transaction_payments AS TP WHERE
